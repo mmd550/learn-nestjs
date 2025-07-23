@@ -14,8 +14,10 @@ import { GetUsersParamsDto } from './dtos/get-users-params.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UsersService } from './providers/users.service';
 import { GetUsersQueryDto } from './dtos/get-users-query.dto';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('Users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   /**
@@ -29,6 +31,13 @@ export class UsersController {
    * /users?limit=20&page=2 -> returns page 2 with limit of 20
    */
   @Get('{/:id}')
+  @ApiOperation({
+    summary: 'Fetches a list of registered users on the application',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Users fetched successfully based on the query',
+  })
   public getUsers(
     @Param() params: GetUsersParamsDto,
     @Query() query: GetUsersQueryDto,

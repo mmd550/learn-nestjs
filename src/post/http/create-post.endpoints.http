@@ -1,0 +1,13 @@
+POST http://localhost:3000/posts
+Content-Type: application/json
+
+{
+    "title": "How to create a candle",
+    "slug": "create-candle",
+    "type": "post",
+    "status": "published",
+    "content": "First you need to eat some water...",
+    "featuredImageUrl": "https://google.com",
+    "tags": ["cooking", "candle"],
+    "metaOptions": [{"key":"k", "value":"vl"}]
+}
