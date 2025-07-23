@@ -7,16 +7,17 @@ import {
   Post,
   Query,
   Headers,
-  ParseIntPipe,
-  DefaultValuePipe,
   Patch,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { GetUsersParamsDto } from './dtos/get-users-params.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
+import { UsersService } from './providers/users.service';
+import { GetUsersQueryDto } from './dtos/get-users-query.dto';
 
 @Controller('users')
 export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
   /**
    * Final Endpoint - /users/id?limit=10&page=1
    * Param id - optional, convert to an integer, can not have default value
@@ -30,13 +31,10 @@ export class UsersController {
   @Get('{/:id}')
   public getUsers(
     @Param() params: GetUsersParamsDto,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
-    limit: number | undefined,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
-    page: number | undefined,
+    @Query() query: GetUsersQueryDto,
   ) {
-    console.log(params, limit, page);
-    return 'You sent a get request to users endpoint';
+    if (params.id) return this.usersService.findOneById(params.id);
+    return this.usersService.findAll(query);
   }
 
   @Post()
