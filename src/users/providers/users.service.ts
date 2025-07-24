@@ -3,6 +3,7 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { GetUsersQueryDto } from '../dtos/get-users-query.dto';
 import { AuthService } from 'src/auth/providers/auth.service';
@@ -51,11 +52,13 @@ export class UsersService {
   }
 
   public findOneById(userId: number) {
-    throw new BadRequestException();
-    return {
+    const user = {
       firstName: 'Alice',
       email: 'alice@doe.com',
       id: userId,
     };
+
+    if (!user) throw new NotFoundException();
+    return user;
   }
 }
