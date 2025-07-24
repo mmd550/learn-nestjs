@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { GetUsersQueryDto } from '../dtos/get-users-query.dto';
 import { AuthService } from 'src/auth/providers/auth.service';
 import { ConfigService, ConfigType } from '@nestjs/config';
@@ -46,6 +51,7 @@ export class UsersService {
   }
 
   public findOneById(userId: number) {
+    throw new BadRequestException();
     return {
       firstName: 'Alice',
       email: 'alice@doe.com',
