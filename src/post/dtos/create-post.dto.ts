@@ -14,7 +14,7 @@ import { PostType } from '../enums/post-type';
 import { PostStatus } from '../enums/post-status';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-class MetaOptionsDto {
+export class MetaOptionsDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
