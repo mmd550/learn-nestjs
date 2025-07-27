@@ -10,6 +10,11 @@ import databaseConfig from './config/database.config';
 import environmentValidation from './config/environment.validation';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
+import { TagsModule } from './tags/tags.module';
+import { MetaOptionsModule } from './meta-options/meta-options.module';
+import { MetaOption } from './meta-options/meta-option.entity';
+import { Tag } from './tags/tag.entity';
+import { Post } from './post/post.entity';
 
 const ENV = process.env.NODE_ENV;
 
@@ -35,11 +40,13 @@ const ENV = process.env.NODE_ENV;
         database: configService.get('database.name'),
         synchronize: configService.get('database.synchronize'),
         autoLoadEntities: configService.get('database.autoLoadEntities'),
-        entities: [User],
+        entities: [User, Tag, MetaOption, Post],
       }),
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    TagsModule,
+    MetaOptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

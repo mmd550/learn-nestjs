@@ -8,6 +8,8 @@ Content-Type: application/json
     "status": "published",
     "content": "First you need to eat some water...",
     "featuredImageUrl": "https://google.com",
-    "tags": ["cooking", "candle"],
-    "metaOptions": [{"key":"k", "value":"vl"}]
+    //"tags": ["cooking", "candle"],
+    "metaOptions": {
+        "metaValue": "{\"carEnasbled\":true,\"footerfdfasActive\":false}"
+    }
 }

@@ -13,17 +13,7 @@ import {
 import { PostType } from '../enums/post-type';
 import { PostStatus } from '../enums/post-status';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-
-export class MetaOptionsDto {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  key: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  value: any;
-}
+import { CreatePostMetaOptionsDto } from 'src/meta-options/dtos/create-post-meta-options.dto';
 
 export class CreatePostDto {
   @ApiProperty()
@@ -72,19 +62,14 @@ export class CreatePostDto {
   tags?: string[];
 
   @ApiPropertyOptional({
-    type: 'array',
-    required: false,
-    items: {
-      type: 'object',
-      properties: {
-        key: { type: 'string' },
-        value: { type: 'any' },
-      },
+    type: CreatePostMetaOptionsDto,
+    description: 'Meta options for the post',
+    example: {
+      metaValue: '{"sidebarEnabled":true,"footerActive":true}',
     },
   })
-  @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })
-  @Type(() => MetaOptionsDto)
-  metaOptions?: MetaOptionsDto[];
+  @Type(() => CreatePostMetaOptionsDto)
+  metaOptions?: CreatePostMetaOptionsDto;
 }
