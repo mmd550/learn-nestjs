@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from 'src/users/providers/users.service';
 import { Post } from '../post.entity';
@@ -41,11 +41,11 @@ export class PostsService {
     //Find the post
     const post = await this.postRepository.findOneBy({ id });
 
-    // Delete the post (we can not delete meta option first because it has a foreign key to post)
+    if (!post) {
+      throw new NotFoundException('Post not found');
+    }
+
     await this.postRepository.delete(id);
-    //  Delete meta option
-    if (post?.metaOptions?.id)
-      await this.metaOptionRepository.delete(post.metaOptions.id);
 
     return {
       deleted: true,

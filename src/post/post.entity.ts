@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PostType } from './enums/post-type';
 import { PostStatus } from './enums/post-status';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
@@ -68,7 +62,9 @@ export class Post {
 
   tags?: string[];
 
-  @OneToOne(() => MetaOption, { cascade: true, eager: true })
-  @JoinColumn()
+  @OneToOne(() => MetaOption, (metaOption) => metaOption.post, {
+    cascade: true,
+    eager: true,
+  })
   metaOptions?: MetaOption;
 }
