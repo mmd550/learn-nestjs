@@ -59,8 +59,8 @@ export class CreatePostDto {
   @ApiPropertyOptional()
   @IsArray()
   @IsOptional()
-  @IsString({ each: true })
-  tags?: string[];
+  @IsInt({ each: true })
+  tags?: number[];
 
   @ApiPropertyOptional({
     type: CreatePostMetaOptionsDto,

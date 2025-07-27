@@ -2,7 +2,7 @@ POST http://localhost:3000/posts
 Content-Type: application/json
 
 {
-    "title": "How to create a candle",
+    "title": "Javascript course",
     "slug": "create-candle-1",
     "type": "post",
     "status": "published",
@@ -12,5 +12,6 @@ Content-Type: application/json
     "metaOptions": {
         "metaValue": "{\"carEnasbled\":true,\"footerfdfasActive\":false}"
     },
-    "authorId": 1
+    "authorId": 1,
+    "tags": [1,2]
 }

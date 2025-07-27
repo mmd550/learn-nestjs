@@ -1,6 +1,8 @@
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -9,6 +11,7 @@ import { PostType } from './enums/post-type';
 import { PostStatus } from './enums/post-status';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
 import { User } from 'src/users/user.entity';
+import { Tag } from 'src/tags/tag.entity';
 
 @Entity()
 export class Post {
@@ -67,7 +70,9 @@ export class Post {
   })
   publishOn?: Date;
 
-  tags?: string[];
+  @ManyToMany(() => Tag, (tag) => tag.posts)
+  @JoinTable()
+  tags?: Tag[];
 
   @OneToOne(() => MetaOption, (metaOption) => metaOption.post, {
     // if we delete or update or create a post, we do the same for meta options
