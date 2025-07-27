@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Post } from 'src/post/post.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -29,6 +30,12 @@ export class User {
 
   @Column({ type: 'varchar' })
   password: string;
+
+  @OneToMany(() => Post, (post) => post.author, {
+    // if we delete a user, we delete all posts
+    cascade: ['remove'],
+  })
+  posts?: Post[];
 }
 
 // export class CreateUserDto {

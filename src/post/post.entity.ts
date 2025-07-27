@@ -1,7 +1,14 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { PostType } from './enums/post-type';
 import { PostStatus } from './enums/post-status';
 import { MetaOption } from 'src/meta-options/meta-option.entity';
+import { User } from 'src/users/user.entity';
 
 @Entity()
 export class Post {
@@ -63,8 +70,13 @@ export class Post {
   tags?: string[];
 
   @OneToOne(() => MetaOption, (metaOption) => metaOption.post, {
+    // if we delete or update or create a post, we do the same for meta options
     cascade: true,
-    eager: true,
+    //  if we want to always get the meta options when we get the post
+    // eager: true,
   })
   metaOptions?: MetaOption;
+
+  @ManyToOne(() => User, (user) => user.posts)
+  author: User;
 }

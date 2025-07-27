@@ -2,11 +2,9 @@ import {
   Body,
   Controller,
   Get,
-  Ip,
   Param,
   Post,
   Query,
-  Headers,
   Patch,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';

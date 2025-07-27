@@ -3,7 +3,7 @@ Content-Type: application/json
 
 {
     "title": "How to create a candle",
-    "slug": "create-candle",
+    "slug": "create-candle-1",
     "type": "post",
     "status": "published",
     "content": "First you need to eat some water...",
@@ -11,5 +11,6 @@ Content-Type: application/json
     //"tags": ["cooking", "candle"],
     "metaOptions": {
         "metaValue": "{\"carEnasbled\":true,\"footerfdfasActive\":false}"
-    }
+    },
+    "authorId": 1
 }

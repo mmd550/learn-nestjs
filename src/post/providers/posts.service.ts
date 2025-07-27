@@ -4,34 +4,34 @@ import { UsersService } from 'src/users/providers/users.service';
 import { Post } from '../post.entity';
 import { Repository } from 'typeorm';
 import { CreatePostDto } from '../dtos/create-post.dto';
-import { MetaOption } from 'src/meta-options/meta-option.entity';
 
 @Injectable()
 export class PostsService {
   constructor(
-    /* Inject UsersService */
-    private readonly usersService: UsersService,
-
     @InjectRepository(Post)
     private readonly postRepository: Repository<Post>,
 
-    @InjectRepository(MetaOption)
-    private readonly metaOptionRepository: Repository<MetaOption>,
+    private readonly usersService: UsersService,
   ) {}
 
   public async create(post: CreatePostDto) {
-    const createdPost = this.postRepository.create(post);
+    const user = await this.usersService.findOneById(post.authorId);
+
+    const createdPost = this.postRepository.create({
+      ...post,
+      author: user,
+    });
+
     return this.postRepository.save(createdPost);
   }
 
-  public async findAll(userId: string) {
-    // const user = await this.usersService.findOneById(Number(userId));
-
+  public async findAll() {
     const posts = await this.postRepository.find({
       // needed if eager is not set to true
-      // relations: {
-      //   metaOptions: true,
-      // },
+      relations: {
+        metaOptions: true,
+        author: true,
+      },
     });
 
     return posts;

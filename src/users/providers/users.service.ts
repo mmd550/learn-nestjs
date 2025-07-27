@@ -39,14 +39,13 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  public findAll(_: GetUsersQueryDto) {
+  public findAll(query: GetUsersQueryDto) {
+    console.log(query);
     return this.userRepository.find();
   }
 
   public async findOneById(userId: number) {
-    const user = await this.userRepository.findOne({
-      where: { id: userId },
-    });
+    const user = await this.userRepository.findOneBy({ id: userId });
 
     if (!user) throw new NotFoundException('User not found');
     return user;
