@@ -8,8 +8,8 @@ export class PostsService {
     private readonly usersService: UsersService,
   ) {}
 
-  public findAll(userId: string) {
-    const user = this.usersService.findOneById(Number(userId));
+  public async findAll(userId: string) {
+    const user = await this.usersService.findOneById(Number(userId));
     if (user)
       return [
         {

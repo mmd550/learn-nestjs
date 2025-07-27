@@ -5,6 +5,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import profileConfig from './config/profile.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './user.entity';
 
 @Module({
   controllers: [UsersController],
@@ -13,7 +14,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   imports: [
     forwardRef(() => AuthModule),
     ConfigModule.forFeature(profileConfig),
-    // TypeOrmModule.forFeature()
+    TypeOrmModule.forFeature([User]),
   ],
 })
 export class UsersModule {}

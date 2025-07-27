@@ -8,8 +8,8 @@ export class AuthService {
     private readonly UsersService: UsersService,
   ) {}
 
-  public login(email: string, password: string, id: string) {
-    const user = this.UsersService.findOneById(1234);
+  public async login(email: string, password: string, id: string) {
+    const user = await this.UsersService.findOneById(1234);
 
     if (user) return 'SAMPLE_TOKEN';
   }

@@ -9,6 +9,11 @@ import { GetUsersQueryDto } from '../dtos/get-users-query.dto';
 import { AuthService } from 'src/auth/providers/auth.service';
 import { ConfigService, ConfigType } from '@nestjs/config';
 import profileConfig from '../config/profile.config';
+import { Repository } from 'typeorm';
+import { User } from '../user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { CreateUserDto } from '../dtos/create-user.dto';
+import { UpdateUserDto } from '../dtos/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -29,36 +34,46 @@ export class UsersService {
      */
     @Inject(profileConfig.KEY)
     private readonly profileConfiguration: ConfigType<typeof profileConfig>,
+
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  public findAll(query: GetUsersQueryDto) {
-    const environment = this.configService.get<string>('S3_BUCKET');
-    const databaseName = this.configService.get<string>('database.name');
-    const profileApiKey = this.profileConfiguration.apiKey;
-    const isAuth = this.authService.isAuthenticated();
-    console.log({ query, isAuth, environment, databaseName, profileApiKey });
-    return [
-      {
-        firstName: 'John',
-        email: 'john@doe.com',
-        id: 1234,
-      },
-      {
-        firstName: 'Alice',
-        email: 'alice@doe.com',
-        id: 234,
-      },
-    ];
+  public findAll(_: GetUsersQueryDto) {
+    return this.userRepository.find();
   }
 
-  public findOneById(userId: number) {
-    const user = {
-      firstName: 'Alice',
-      email: 'alice@doe.com',
-      id: userId,
-    };
+  public async findOneById(userId: number) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
 
-    if (!user) throw new NotFoundException();
+    if (!user) throw new NotFoundException('User not found');
     return user;
+  }
+
+  public async create(user: CreateUserDto) {
+    const existingUser = await this.userRepository.findOne({
+      where: { email: user.email },
+    });
+
+    if (existingUser)
+      throw new BadRequestException(
+        'User with this email address already exists',
+      );
+
+    let newUser = this.userRepository.create(user);
+    newUser = await this.userRepository.save(newUser);
+    return newUser;
+  }
+
+  public async update(user: UpdateUserDto) {
+    const existingUser = await this.userRepository.findOne({
+      where: { id: user.id },
+    });
+
+    if (!existingUser) throw new NotFoundException('User not found');
+    const updatedUser = this.userRepository.merge(existingUser, user);
+    return this.userRepository.save(updatedUser);
   }
 }

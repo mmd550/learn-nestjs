@@ -30,7 +30,7 @@ export class UsersController {
    * /users/1234 -> returns one user who's id is 1234
    * /users?limit=20&page=2 -> returns page 2 with limit of 20
    */
-  @Get('{/:id}')
+  @Get()
   @ApiOperation({
     summary: 'Fetches a list of registered users on the application',
   })
@@ -38,26 +38,43 @@ export class UsersController {
     status: 200,
     description: 'Users fetched successfully based on the query',
   })
-  public getUsers(
-    @Param() params: GetUsersParamsDto,
-    @Query() query: GetUsersQueryDto,
-  ) {
-    if (params.id) return this.usersService.findOneById(params.id);
+  public async getUsers(@Query() query: GetUsersQueryDto) {
     return this.usersService.findAll(query);
   }
 
+  @Get('/:id')
+  @ApiOperation({
+    summary: 'Fetches a user by their id',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User fetched successfully based on the id',
+  })
+  public async getUserById(@Param() params: GetUsersParamsDto) {
+    return this.usersService.findOneById(params.id);
+  }
+
   @Post()
-  public createUser(
-    @Body() body: CreateUserDto,
-    @Ip() ip: string,
-    @Headers() headers: unknown,
-  ) {
-    console.log(body, { ip }, { headers });
-    return 'You sent a post request to users endpoint';
+  @ApiOperation({
+    summary: 'Creates a new user',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'User created successfully',
+  })
+  public createUser(@Body() body: CreateUserDto) {
+    return this.usersService.create(body);
   }
 
   @Patch()
+  @ApiOperation({
+    summary: 'Updates a user',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'User updated successfully',
+  })
   public updateUser(@Body() body: UpdateUserDto) {
-    return body;
+    return this.usersService.update(body);
   }
 }
